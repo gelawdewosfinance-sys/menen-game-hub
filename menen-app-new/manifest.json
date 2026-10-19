@@ -9,5 +9,12 @@
   "start_url": "/",
   "theme_color": "#ffffff",
   "description": "A professional ready game hub application",
-  "id": "menen-app-hub"
+  "id": "menen-app-hub",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
