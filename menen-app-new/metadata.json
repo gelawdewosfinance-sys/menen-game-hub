@@ -1,0 +1,6 @@
+{
+  "name": "Menen",
+  "description": "Menen Block Blast: The addictive 8x8 block puzzle game where you drag, match, and blast lines of colorful 3D jewel blocks to earn mega combos and high scores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
