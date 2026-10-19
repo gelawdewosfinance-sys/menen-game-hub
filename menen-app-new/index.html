@@ -1,173 +1,352 @@
+
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#080b14">
+    <meta name="description" content="Menen Game Hub — Your next great gaming experience awaits.">
     <title>Menen Game Hub</title>
+    <link rel="manifest" href="./manifest.json">
+
     <style>
+        :root {
+            color-scheme: dark;
+            --gold: #f3cf79;
+            --gold-light: #fff0bf;
+            --background: #080b14;
+            --panel: rgba(20, 25, 41, .88);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: "Segoe UI", Tahoma, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #ffffff;
-            text-align: center;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: grid;
+            place-items: center;
+            padding: 24px;
             overflow: hidden;
-            position: relative;
+            text-align: center;
+            color: #fff;
+            background:
+                radial-gradient(ellipse at 50% 25%, rgba(42, 64, 104, .45), transparent 55%),
+                radial-gradient(ellipse at 10% 90%, rgba(139, 91, 35, .16), transparent 40%),
+                linear-gradient(145deg, #080b14, #101a2a 55%, #080b14);
         }
 
-        /* 🔴 መላውን ስክሪን የሚሸፍን የኢንተርኔት ማቋረጫ ገጽ (Full-Screen Offline Alert) */
-        #full-offline-screen {
+        body::before,
+        body::after {
+            content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #8B0000, #FF0000); /* ደማቅ ቀይ ቀለም */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-            opacity: 0;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            filter: blur(80px);
             pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
+            opacity: .18;
         }
 
-        /* ኢንተርኔት ሲጠፋ ይህ ክላስ ተጨምሮ ስክሪኑን ሙሉ በሙሉ ይቆጣጠረዋል */
-        #full-offline-screen.show {
-            opacity: 1;
-            pointer-events: auto;
+        body::before {
+            background: #d6a64e;
+            top: -120px;
+            right: -80px;
         }
 
-        .offline-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            animation: bounce 1s infinite alternate;
+        body::after {
+            background: #3479c5;
+            bottom: -130px;
+            left: -80px;
         }
 
-        .offline-title {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #ffffff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-        }
-
-        .offline-text {
-            font-size: 1.2rem;
-            color: #ffcccc;
-            max-width: 80%;
-            line-height: 1.5;
-        }
-
-        @keyframes bounce {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-15px); }
-        }
-
-        /* ዋናው የጨዋታ መያዣ ሳጥን */
         .container {
-            padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            max-width: 90%;
-            width: 400px;
+            position: relative;
             z-index: 1;
+            width: min(100%, 410px);
+            padding: 42px 25px 36px;
+            overflow: hidden;
+            border: 1px solid rgba(243, 207, 121, .32);
+            border-radius: 28px;
+            background: var(--panel);
+            box-shadow:
+                0 28px 80px rgba(0, 0, 0, .42),
+                inset 0 1px 0 rgba(255, 255, 255, .08);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            animation: appear .7s ease both;
+        }
+
+        .top-line {
+            width: 64px;
+            height: 3px;
+            margin: 0 auto 27px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+        }
+
+        .brand-mark {
+            width: 92px;
+            height: 92px;
+            margin: 0 auto 23px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(243, 207, 121, .65);
+            border-radius: 27px;
+            background: linear-gradient(145deg, #2b2630, #10131d);
+            box-shadow:
+                0 0 35px rgba(243, 207, 121, .12),
+                inset 0 0 20px rgba(243, 207, 121, .06);
+            color: var(--gold-light);
+            font-family: Georgia, serif;
+            font-size: 39px;
+            font-weight: 800;
+            letter-spacing: -3px;
+            text-shadow: 0 2px 18px rgba(243, 207, 121, .35);
+        }
+
+        .eyebrow {
+            margin-bottom: 10px;
+            color: var(--gold);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #00f2fe, #4facfe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-bottom: 14px;
+            color: var(--gold-light);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.85rem, 8vw, 2.45rem);
+            font-weight: 700;
+            letter-spacing: 1px;
+            line-height: 1.15;
         }
 
-        p {
-            font-size: 1.1rem;
-            color: #d1d5db;
-            margin-bottom: 25px;
+        .subtitle {
+            max-width: 290px;
+            margin: 0 auto 29px;
+            color: #bac4d6;
+            font-size: .98rem;
+            line-height: 1.7;
+        }
+
+        .loading-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, .08);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, .035);
         }
 
         .loader {
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.1);
-            border-top: 5px solid #00f2fe;
+            width: 22px;
+            height: 22px;
+            flex: 0 0 auto;
+            border: 2px solid rgba(243, 207, 121, .2);
+            border-top-color: var(--gold);
             border-radius: 50%;
-            margin: 0 auto;
-            animation: spin 1s linear infinite;
+            animation: spin .85s linear infinite;
+        }
+
+        .loading-text {
+            color: #e1d8c5;
+            font-size: .88rem;
+            letter-spacing: .3px;
+        }
+
+        .footer {
+            margin-top: 26px;
+            color: #7f8ba0;
+            font-size: .7rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        /* Full-screen internet connection alert */
+        #full-offline-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            padding: max(28px, env(safe-area-inset-top))
+                     24px
+                     max(28px, env(safe-area-inset-bottom));
+            background:
+                radial-gradient(ellipse at 50% 30%, rgba(255, 95, 95, .22), transparent 55%),
+                linear-gradient(145deg, #31070d, #8f101b 55%, #3b080e);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity .3s ease, visibility .3s ease;
+        }
+
+        #full-offline-screen.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .offline-symbol {
+            width: 104px;
+            height: 104px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 27px;
+            border: 1px solid rgba(255, 255, 255, .3);
+            border-radius: 32px;
+            background: rgba(30, 0, 0, .23);
+            box-shadow: 0 0 45px rgba(255, 45, 45, .15);
+            font-size: 3.4rem;
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+
+        .offline-label {
+            margin-bottom: 12px;
+            color: #ffcccc;
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .offline-title {
+            max-width: 440px;
+            margin-bottom: 16px;
+            color: #fff;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(1.8rem, 7vw, 2.6rem);
+            line-height: 1.2;
+            text-shadow: 0 3px 20px rgba(0, 0, 0, .25);
+        }
+
+        .offline-text {
+            max-width: 350px;
+            color: #ffe0e0;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .offline-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-top: 29px;
+            padding: 12px 18px;
+            border: 1px solid rgba(255, 255, 255, .18);
+            border-radius: 30px;
+            background: rgba(0, 0, 0, .15);
+            color: #fff;
+            font-size: .8rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff7777;
+            box-shadow: 0 0 12px #ff7777;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.045); }
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 360px) {
+            body { padding: 16px; }
+            .container { padding: 32px 18px 27px; border-radius: 23px; }
+            .brand-mark { width: 78px; height: 78px; font-size: 34px; }
+            .subtitle { font-size: .9rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: .01ms !important;
+            }
         }
     </style>
-    <link rel="manifest" href="manifest.json">
 </head>
+
 <body>
-
-    <!-- 🔴 መላውን ስክሪን የሚሸፍን ቀይ የኦፍላይን ማስጠንቀቂያ ስክሪን -->
-    <div id="full-offline-screen">
-        <div class="offline-icon">📡❌</div>
-        <div class="offline-title">ኢንተርኔት ተቋርጧል!</div>
-        <div class="offline-text">እባክዎ መተግበሪያውን ለመቀጠል የኢንተርኔት ግንኙነትዎን ያብሩ (Wi-Fi ወይም Mobile Data)።</div>
+    <div id="full-offline-screen" role="alert" aria-live="assertive">
+        <div class="offline-symbol" aria-hidden="true">📡</div>
+        <div class="offline-label">Connection Status</div>
+        <h2 class="offline-title">Internet Connection Lost</h2>
+        <p class="offline-text">
+            Your internet connection has been interrupted.
+            Please reconnect to Wi-Fi or mobile data to continue
+            using Menen Game Hub.
+        </p>
+        <div class="offline-status">
+            <span class="status-dot"></span>
+            Waiting for connection...
+        </div>
     </div>
 
-    <div class="container">
+    <main class="container">
+        <div class="top-line"></div>
+        <div class="brand-mark" aria-label="Menen logo">M</div>
+        <p class="eyebrow">Welcome to</p>
         <h1>Menen Game Hub</h1>
-        <p>ቀጣዩ ትልቅ ጨዋታ በቅርቡ ይጠብቁን!</p>
-        <div class="loader"></div>
-    </div>
+        <p class="subtitle">
+            Your next great gaming experience is coming soon.
+            Get ready to play, explore, and enjoy.
+        </p>
+
+        <div class="loading-area">
+            <div class="loader" aria-hidden="true"></div>
+            <p class="loading-text">Preparing your experience...</p>
+        </div>
+
+        <p class="footer">A world of games awaits</p>
+    </main>
 
     <script>
-        // --- ኢንተርኔት መቋረጥን በመቆጣጠር መላውን ስክሪን በቀይ መሸፈኛ መቆጣጠር ---
         const offlineScreen = document.getElementById('full-offline-screen');
 
         function checkConnection() {
-            if (!navigator.onLine) {
-                // ኢንተርኔት ከሌለ ቀዩ ስክሪን መላውን ገጽ ይሸፍነዋል
-                offlineScreen.classList.add('show');
-            } else {
-                // ኢንተርኔት ሲመለስ ቀዩ ስክሪን ይጠፋል
-                offlineScreen.classList.remove('show');
-            }
+            offlineScreen.classList.toggle('show', !navigator.onLine);
         }
 
-        // ኢንተርኔት ሲቋረጥ ወይም ሲመለስ በራሱ እንዲቀየር ማድረግ
         window.addEventListener('online', checkConnection);
         window.addEventListener('offline', checkConnection);
+        window.addEventListener('pageshow', checkConnection);
 
-        // ገጹ ሲከፈት መጀመሪያ ሁኔታውን ማረጋገጥ
         checkConnection();
 
-        // በየጊዜው በራስ-ሰር ኔትወርክ መኖሩን ማረጋገጥ (Extra safety check)
-        setInterval(checkConnection, 3000);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .catch(error => {
+                        console.error('Service Worker registration failed:', error);
+                    });
+            });
+        }
     </script>
-    <script>
-    // Service Worker ን መመዝገብ
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('Service Worker registered!'))
-                .catch(err => console.log('Service Worker error: ', err));
-        });
-    }
-</script>
 </body>
 </html>
