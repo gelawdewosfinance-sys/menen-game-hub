@@ -5,45 +5,158 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menen Game Hub</title>
     <style>
-        body {
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
             height: 100vh;
-            background-color: #0f172a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             color: #ffffff;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 🔴 መላውን ስክሪን የሚሸፍን የኢንተርኔት ማቋረጫ ገጽ (Full-Screen Offline Alert) */
+        #full-offline-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #8B0000, #FF0000); /* ደማቅ ቀይ ቀለም */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            font-family: sans-serif;
-            text-align: center;
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
         }
-        h1 {
-            font-size: 32px;
-            color: #38bdf8;
+
+        /* ኢንተርኔት ሲጠፋ ይህ ክላስ ተጨምሮ ስክሪኑን ሙሉ በሙሉ ይቆጣጠረዋል */
+        #full-offline-screen.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite alternate;
+        }
+
+        .offline-title {
+            font-size: 2.5rem;
+            font-weight: bold;
             margin-bottom: 10px;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+        }
+
+        .offline-text {
+            font-size: 1.2rem;
+            color: #ffcccc;
+            max-width: 80%;
+            line-height: 1.5;
+        }
+
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+
+        /* ዋናው የጨዋታ መያዣ ሳጥን */
+        .container {
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            max-width: 90%;
+            width: 400px;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
             letter-spacing: 2px;
         }
-        p {
-            color: #94a3b8;
-            font-size: 16px;
-        }
-        /* የኔትሊፋይ ባጅን ሙሉ በሙሉ የሚደብቅ ኮድ */
-#netlify-badge, 
-.netlify-badge, 
-[data-netlify-badge],
-iframe[src*="netlify"] {
-    display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
-    pointer-events: none !important;
-}
 
+        p {
+            font-size: 1.1rem;
+            color: #d1d5db;
+            margin-bottom: 25px;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.1);
+            border-top: 5px solid #00f2fe;
+            border-radius: 50%;
+            margin: 0 auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
-    <div>
-        <h1>COMING SOON</h1>
-        <p>Menen Game Hub.........</p>
+
+    <!-- 🔴 መላውን ስክሪን የሚሸፍን ቀይ የኦፍላይን ማስጠንቀቂያ ስክሪን -->
+    <div id="full-offline-screen">
+        <div class="offline-icon">📡❌</div>
+        <div class="offline-title">ኢንተርኔት ተቋርጧል!</div>
+        <div class="offline-text">እባክዎ መተግበሪያውን ለመቀጠል የኢንተርኔት ግንኙነትዎን ያብሩ (Wi-Fi ወይም Mobile Data)።</div>
     </div>
+
+    <div class="container">
+        <h1>Menen Game Hub</h1>
+        <p>ቀጣዩ ትልቅ ጨዋታ በቅርቡ ይጠብቁን!</p>
+        <div class="loader"></div>
+    </div>
+
+    <script>
+        // --- ኢንተርኔት መቋረጥን በመቆጣጠር መላውን ስክሪን በቀይ መሸፈኛ መቆጣጠር ---
+        const offlineScreen = document.getElementById('full-offline-screen');
+
+        function checkConnection() {
+            if (!navigator.onLine) {
+                // ኢንተርኔት ከሌለ ቀዩ ስክሪን መላውን ገጽ ይሸፍነዋል
+                offlineScreen.classList.add('show');
+            } else {
+                // ኢንተርኔት ሲመለስ ቀዩ ስክሪን ይጠፋል
+                offlineScreen.classList.remove('show');
+            }
+        }
+
+        // ኢንተርኔት ሲቋረጥ ወይም ሲመለስ በራሱ እንዲቀየር ማድረግ
+        window.addEventListener('online', checkConnection);
+        window.addEventListener('offline', checkConnection);
+
+        // ገጹ ሲከፈት መጀመሪያ ሁኔታውን ማረጋገጥ
+        checkConnection();
+
+        // በየጊዜው በራስ-ሰር ኔትወርክ መኖሩን ማረጋገጥ (Extra safety check)
+        setInterval(checkConnection, 3000);
+    </script>
 </body>
 </html>
