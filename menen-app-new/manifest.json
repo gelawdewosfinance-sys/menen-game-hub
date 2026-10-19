@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Menen app Hub",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "Menen Hub",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "description": "A professional ready game hub application",
+  "id": "menen-app-hub"
+}
