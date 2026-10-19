@@ -1,993 +1,160 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="am">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0b0d14">
-  <meta name="description" content="Menen Game Hub - discover, play, and plan.">
-  <title>Menen Game Hub</title>
-  <link rel="manifest" href="./manifest.json">
-
-  <style>
-    :root {
-      --bg: #0b0d14;
-      --panel: #151925;
-      --border: #292d3a;
-      --gold: #f5c66a;
-      --text: #f5f6fa;
-      --muted: #a8adbc;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      min-height: 100%;
-      background: var(--bg);
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 22px 16px 115px;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at top, #202033 0%, transparent 48%),
-        var(--bg);
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    button, input, textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
-
-    .brand {
-      font-size: 23px;
-      font-weight: 800;
-      letter-spacing: 1.5px;
-      color: var(--gold);
-    }
-
-    .brand-subtitle {
-      margin-top: 4px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 3px;
-    }
-
-    .icon-button {
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      color: var(--gold);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-    }
-
-    .page {
-      display: none;
-      animation: appear .2s ease;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .welcome {
-      position: relative;
-      overflow: hidden;
-      padding: 26px 22px;
-      min-height: 180px;
-      background: linear-gradient(135deg, #22243b, #151925 70%);
-      border: 1px solid #343347;
-      border-radius: 24px;
-      margin-bottom: 24px;
-    }
-
-    .eyebrow {
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 2px;
-    }
-
-    h1 {
-      margin: 12px 0 10px;
-      font-size: clamp(25px, 5vw, 36px);
-      line-height: 1.15;
-    }
-
-    h2 {
-      font-size: 19px;
-      margin: 0 0 15px;
-    }
-
-    p {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .welcome p {
-      max-width: 440px;
-      margin-bottom: 0;
-      font-size: 14px;
-    }
-
-    .section {
-      margin-top: 26px;
-    }
-
-    .section-heading {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
-    .section-heading h2 {
-      margin: 0;
-    }
-
-    .small-muted {
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .game-card {
-      min-width: 0;
-      padding: 18px 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-    }
-
-    .game-icon {
-      width: 45px;
-      height: 45px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 13px;
-      background: #252638;
-      border-radius: 14px;
-      font-size: 23px;
-    }
-
-    .game-card h3 {
-      margin: 0 0 7px;
-      font-size: 15px;
-    }
-
-    .game-card p {
-      margin: 0;
-      font-size: 12px;
-    }
-
-    .primary-button {
-      border: 0;
-      border-radius: 12px;
-      padding: 11px 15px;
-      margin-top: 14px;
-      background: var(--gold);
-      color: #17130b;
-      font-weight: 700;
-      font-size: 12px;
-    }
-
-    .secondary-button {
-      color: var(--gold);
-      background: #202333;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 13px;
-      font-size: 12px;
-    }
-
-    .empty-state {
-      padding: 24px 18px;
-      text-align: center;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-    }
-
-    .empty-state .big-icon {
-      font-size: 32px;
-    }
-
-    .form-card {
-      padding: 20px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-    }
-
-    .field-label {
-      display: block;
-      margin: 15px 0 7px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .field {
-      width: 100%;
-      padding: 13px;
-      color: var(--text);
-      background: #0e111b;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      outline: none;
-    }
-
-    .field:focus {
-      border-color: var(--gold);
-    }
-
-    textarea.field {
-      resize: vertical;
-      min-height: 100px;
-    }
-
-    .plan-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 11px;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .plan-item:last-child {
-      border-bottom: 0;
-    }
-
-    .plan-item input {
-      margin-top: 4px;
-      accent-color: var(--gold);
-    }
-
-    .plan-item.done .plan-text {
-      text-decoration: line-through;
-      color: var(--muted);
-    }
-
-    .plan-text {
-      flex: 1;
-      overflow-wrap: anywhere;
-      font-size: 14px;
-    }
-
-    .delete-button {
-      color: #ff8c8c;
-      background: transparent;
-      border: 0;
-      font-size: 18px;
-    }
-
-    .profile-mark {
-      width: 80px;
-      height: 80px;
-      display: grid;
-      place-items: center;
-      margin-bottom: 18px;
-      color: var(--gold);
-      background: #242538;
-      border: 1px solid #414056;
-      border-radius: 24px;
-      font-size: 34px;
-      font-weight: 800;
-    }
-
-    /* Single-row bottom navigation */
-    .bottom-nav {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1000;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
-      justify-content: space-around;
-      align-items: stretch;
-      width: 100%;
-      padding: 9px 3px calc(9px + env(safe-area-inset-bottom));
-      background: rgba(11, 13, 20, .97);
-      border-top: 1px solid var(--border);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-    }
-
-    .nav-item {
-      flex: 1 1 0;
-      min-width: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      padding: 2px 0;
-      color: var(--muted);
-      background: transparent;
-      border: 0;
-      text-align: center;
-      text-decoration: none;
-      white-space: nowrap;
-      font-size: clamp(9px, 2.6vw, 11px);
-    }
-
-    .nav-item svg {
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-      stroke: currentColor;
-    }
-
-    .nav-item.active {
-      color: var(--gold);
-    }
-
-    .nav-item:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: -2px;
-      border-radius: 8px;
-    }
-
-    /* English offline screen */
-    .offline-screen {
-      position: fixed;
-      inset: 0;
-      z-index: 2000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 25px;
-      text-align: center;
-      background: rgba(10, 4, 8, .97);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity .25s ease, visibility .25s ease;
-    }
-
-    .offline-screen.show {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-
-    .offline-symbol {
-      width: 74px;
-      height: 74px;
-      display: grid;
-      place-items: center;
-      border: 1px solid #71333c;
-      border-radius: 24px;
-      color: #ff818b;
-      background: #281319;
-      font-size: 30px;
-      margin-bottom: 22px;
-    }
-
-    .offline-screen h2 {
-      color: #fff;
-      font-size: 25px;
-      margin-bottom: 8px;
-    }
-
-    .offline-screen p {
-      max-width: 390px;
-      font-size: 14px;
-    }
-
-    .offline-status {
-      margin-top: 15px;
-      color: #ff9ba2;
-      font-size: 12px;
-    }
-
-    @media (min-width: 650px) {
-      body {
-        padding-top: 32px;
-        padding-bottom: 120px;
-      }
-
-      .card-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .bottom-nav {
-        padding-top: 12px;
-        padding-bottom: calc(12px + env(safe-area-inset-bottom));
-      }
-
-      .nav-item {
-        gap: 6px;
-        font-size: 12px;
-      }
-
-      .nav-item svg {
-        width: 19px;
-        height: 19px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="Menen - Games and profile">
+  <title>Menen</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
 </head>
-
 <body>
-  <main class="app">
-    <header class="topbar">
-      <div>
-        <div class="brand">MENEN</div>
-        <div class="brand-subtitle">GAME HUB</div>
-      </div>
-      <button class="icon-button" id="search-button" aria-label="Search games">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="1.8">
-          <circle cx="11" cy="11" r="7"></circle>
-          <path d="m16 16 4 4"></path>
-        </svg>
-      </button>
-    </header>
+  <header class="app-header">
+    <div class="app-logo">Menen<span>.</span></div>
+    <div class="coin-pill">🪙 <b id="headerCoins">100</b></div>
+  </header>
 
-    <!-- HOME -->
-    <section class="page active" id="page-home" aria-labelledby="home-title">
+  <main class="page">
+    <!-- GAME PAGE -->
+    <section id="gamePage" class="page-section hidden">
       <div class="welcome">
-        <div class="eyebrow">WELCOME TO MENEN</div>
-        <h1 id="home-title">Discover Games.</h1>
-        <p>Your gaming space. Explore games, save favorites, and organize your plans in one place.</p>
+        <p class="eyebrow">WELCOME TO MENEN</p>
+        <h1>Let's play! 🎮</h1>
+        <p>Play games and enjoy your Menen experience.</p>
       </div>
 
-      <div class="section">
-        <div class="section-heading">
-          <h2>Featured Games</h2>
-          <span class="small-muted">Your hub</span>
+      <div class="wallet-card">
+        <p>Your Menen Coins</p>
+        <div class="coin-balance">🪙 <span id="gameCoins">100</span></div>
+        <p>Play games to earn more coins.</p>
+      </div>
+
+      <h2 class="section-title">Games</h2>
+      <div class="game-grid">
+        <button class="game-card" data-game="coming">
+          <div class="game-icon">🧩</div>
+          <h3>Puzzle Game</h3>
+          <p>Coming soon</p>
+        </button>
+        <button class="game-card" data-game="coming">
+          <div class="game-icon">🎯</div>
+          <h3>Target Game</h3>
+          <p>Coming soon</p>
+        </button>
+      </div>
+      <p class="notice">Games are sample cards for now.</p>
+    </section>
+
+    <!-- PROFILE PAGE -->
+    <section id="profilePage" class="page-section">
+      <div class="welcome">
+        <p class="eyebrow">YOUR MENEN ACCOUNT</p>
+        <h1>My Profile 👋</h1>
+        <p>Manage your profile and your coins.</p>
+      </div>
+
+      <div class="profile-card">
+        <div class="avatar" id="avatarPreview">👤</div>
+
+        <label for="photoInput" class="upload-button">
+          📷 Change photo
+        </label>
+        <input id="photoInput" type="file" accept="image/*" hidden>
+
+        <h2 id="displayName" class="profile-name">Menen Player</h2>
+        <p class="muted">Menen member</p>
+
+        <div class="form-group">
+          <label for="nameInput">Your name</label>
+          <input id="nameInput" type="text"
+            maxlength="30" placeholder="Enter your name">
         </div>
-        <div class="card-grid" id="home-games"></div>
-      </div>
-    </section>
-
-    <!-- EXPLORE -->
-    <section class="page" id="page-explore">
-      <div class="section-heading">
-        <h1>Explore</h1>
-      </div>
-      <p>Discover the games available in your hub.</p>
-      <div class="form-card">
-        <label class="field-label" for="explore-search">Search games</label>
-        <input class="field" id="explore-search" type="search"
-          placeholder="Search by game name...">
-      </div>
-      <div class="section">
-        <div class="card-grid" id="explore-games"></div>
-      </div>
-    </section>
-
-    <!-- GAMES -->
-    <section class="page" id="page-games">
-      <h1>Games</h1>
-      <p>All games in your Menen Game Hub.</p>
-      <div class="card-grid" id="all-games"></div>
-    </section>
-
-    <!-- FAVORITES -->
-    <section class="page" id="page-favorites">
-      <h1>Favorites</h1>
-      <p>Your saved games will appear here.</p>
-      <div class="card-grid" id="favorite-games"></div>
-      <div class="empty-state" id="favorites-empty">
-        <div class="big-icon">♡</div>
-        <h2>No favorites yet</h2>
-        <p>Tap the heart on a game to add it to your favorites.</p>
-        <button class="primary-button" data-go="explore">Explore Games</button>
-      </div>
-    </section>
-
-    <!-- PLAN -->
-    <section class="page" id="page-plan">
-      <h1>My Plan</h1>
-      <p>Set goals, make a plan, and track your progress.</p>
-
-      <div class="form-card">
-        <label class="field-label" for="plan-title">Plan or goal</label>
-        <input class="field" id="plan-title" type="text"
-          maxlength="120" placeholder="e.g. Practice for 30 minutes">
-
-        <label class="field-label" for="plan-date">Date</label>
-        <input class="field" id="plan-date" type="date" />
-
-        <label class="field-label" for="plan-notes">Notes (optional)</label>
-        <textarea class="field" id="plan-notes" maxlength="1000"
-          placeholder="Write your plan here..."></textarea>
-
-        <button class="primary-button" id="add-plan">+ Add to Plan</button>
+        <button id="saveProfile" class="primary-btn">
+          Save Profile
+        </button>
+        <p id="profileMessage" class="feedback" aria-live="polite"></p>
       </div>
 
-      <div class="section">
-        <div class="section-heading">
-          <h2>My Tasks</h2>
-          <span class="small-muted" id="plan-count">0 tasks</span>
+      <h2 class="section-title">My Wallet 🪙</h2>
+      <div class="wallet-card">
+        <p>Your coin balance</p>
+        <div class="coin-balance">
+          🪙 <span id="profileCoins">100</span>
         </div>
-        <div class="form-card" id="plan-list">
-          <p id="plan-empty">No tasks yet. Add your first plan above.</p>
-        </div>
+        <p>Menen Coins</p>
       </div>
-    </section>
 
-    <!-- PROFILE -->
-    <section class="page" id="page-profile">
-      <h1>Profile</h1>
-      <div class="form-card">
-        <div class="profile-mark">M</div>
-        <h2>Menen Game Hub</h2>
-        <p>Your personal gaming space.</p>
+      <div class="content-card">
+        <h3>Send Coins</h3>
+        <p class="muted">
+          Demo only — this does not transfer coins to another real account.
+        </p>
+        <div class="form-group">
+          <label for="recipientInput">Recipient username</label>
+          <input id="recipientInput" type="text"
+            placeholder="Enter username">
+        </div>
+        <div class="form-group">
+          <label for="amountInput">Amount of coins</label>
+          <input id="amountInput" type="number"
+            min="1" step="1" placeholder="e.g. 10">
+        </div>
+        <button id="sendCoins" class="primary-btn">Send (Demo)</button>
+        <p id="sendMessage" class="feedback" aria-live="polite"></p>
+      </div>
 
-        <label class="field-label" for="profile-name">Display name</label>
-        <input class="field" id="profile-name" maxlength="60"
-          placeholder="Enter your display name">
+      <h2 class="section-title">Account Verification 🪪</h2>
+      <div class="content-card">
+        <p class="muted">
+          Verification will require a secure upload service and administrator
+          review. This sample does not upload or save your ID.
+        </p>
+        <div class="form-group">
+          <label for="idInput">Choose an ID file (sample only)</label>
+          <input id="idInput" type="file"
+            accept="image/*,.pdf">
+        </div>
+        <button id="verificationButton" class="secondary-btn">
+          Check verification steps
+        </button>
+        <p id="verificationMessage" class="feedback"
+          aria-live="polite"></p>
+      </div>
 
-        <button class="primary-button" id="save-profile">Save Profile</button>
-        <p class="small-muted" id="profile-status" aria-live="polite"></p>
+      <h2 class="section-title">Google Account</h2>
+      <div class="content-card">
+        <p class="muted">
+          Google sign-in needs secure OAuth setup before it can work.
+        </p>
+        <button id="googleButton" class="secondary-btn">
+          Continue with Google
+        </button>
+        <p id="googleMessage" class="feedback"
+          aria-live="polite"></p>
       </div>
     </section>
   </main>
 
-  <!-- Bottom navigation: all six items on one row -->
   <nav class="bottom-nav" aria-label="Main navigation">
-    <button class="nav-item active" data-page="home" aria-current="page">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="m3 10 9-7 9 7"></path>
-        <path d="M5 9v11h14V9"></path>
-        <path d="M9 20v-6h6v6"></path>
-      </svg>
-      <span>Home</span>
+    <button class="nav-item" data-page="gamePage">
+      <span>🎮</span>
+      <small>Game</small>
     </button>
-
-    <button class="nav-item" data-page="explore">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="9"></circle>
-        <path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2Z"></path>
-      </svg>
-      <span>Explore</span>
-    </button>
-
-    <button class="nav-item" data-page="games">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M6 8h12a4 4 0 0 1 3.8 5.2l-1.2 4a2 2 0 0 1-3.2 1l-3-2.2h-4l-3 2.2a2 2 0 0 1-3.2-1l-1.2-4A4 4 0 0 1 6 8Z"></path>
-        <path d="M8 11v4M6 13h4M16 12h.01M18 14h.01"></path>
-      </svg>
-      <span>Games</span>
-    </button>
-
-    <button class="nav-item" data-page="favorites">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20.8 8.8c0 5.2-8.8 10-8.8 10S3.2 14 3.2 8.8A4.3 4.3 0 0 1 12 7.1a4.3 4.3 0 0 1 8.8 1.7Z"></path>
-      </svg>
-      <span>Favorites</span>
-    </button>
-
-    <button class="nav-item" data-page="plan">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <rect x="5" y="4" width="14" height="17" rx="2"></rect>
-        <path d="M9 4.5h6M9 10h6M9 14h6M9 18h3"></path>
-      </svg>
-      <span>Plan</span>
-    </button>
-
-    <button class="nav-item" data-page="profile">
-      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"
-        stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="8" r="4"></circle>
-        <path d="M4.5 21a7.5 7.5 0 0 1 15 0"></path>
-      </svg>
-      <span>Profile</span>
+    <button class="nav-item active" data-page="profilePage">
+      <span>👤</span>
+      <small>Profile</small>
     </button>
   </nav>
 
-  <!-- Offline overlay -->
-  <div class="offline-screen" id="offline-screen"
-    role="status" aria-live="polite" aria-hidden="true">
-    <div class="offline-symbol">!</div>
-    <h2>Internet Connection Lost</h2>
-    <p>Your internet connection has been interrupted. Please reconnect to Wi-Fi or mobile data to continue using Menen Game Hub.</p>
-    <div class="offline-status">Waiting for connection...</div>
-  </div>
-
+  <script src="app.js"></script>
   <script>
-    /*
-      Demo game cards:
-      Replace these entries with your actual game list and game URLs.
-      This sample does not create or host playable games by itself.
-    */
-    const games = [
-      {
-        id: "game-1",
-        name: "Game One",
-        description: "Add your first game here.",
-        icon: "🎮",
-        url: ""
-      },
-      {
-        id: "game-2",
-        name: "Game Two",
-        description: "Discover another game.",
-        icon: "🕹️",
-        url: ""
-      },
-      {
-        id: "game-3",
-        name: "Game Three",
-        description: "Your next gaming adventure.",
-        icon: "🏆",
-        url: ""
-      },
-      {
-        id: "game-4",
-        name: "Game Four",
-        description: "Add a game link to get started.",
-        icon: "✨",
-        url: ""
-      }
-    ];
-
-    const STORAGE = {
-      favorites: "menen-favorites-v1",
-      plans: "menen-plans-v1",
-      profile: "menen-profile-v1"
-    };
-
-    function readStorage(key, fallback) {
-      try {
-        const raw = localStorage.getItem(key);
-        return raw ? JSON.parse(raw) : fallback;
-      } catch (error) {
-        return fallback;
-      }
-    }
-
-    function writeStorage(key, value) {
-      try {
-        localStorage.setItem(key, JSON.stringify(value));
-        return true;
-      } catch (error) {
-        return false;
-      }
-    }
-
-    let favorites = readStorage(STORAGE.favorites, []);
-    let plans = readStorage(STORAGE.plans, []);
-    let profile = readStorage(STORAGE.profile, { name: "" });
-
-    function escapeHTML(value) {
-      return String(value).replace(/[&<>"']/g, function (char) {
-        return {
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#39;"
-        }[char];
-      });
-    }
-
-    function showPage(pageName) {
-      const target = document.getElementById("page-" + pageName);
-      if (!target) return;
-
-      document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-      });
-
-      target.classList.add("active");
-
-      document.querySelectorAll(".nav-item").forEach(button => {
-        const isActive = button.dataset.page === pageName;
-        button.classList.toggle("active", isActive);
-
-        if (isActive) {
-          button.setAttribute("aria-current", "page");
-        } else {
-          button.removeAttribute("aria-current");
-        }
-      });
-
-      if (pageName === "favorites") renderFavorites();
-      if (pageName === "plan") renderPlans();
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    document.querySelectorAll(".nav-item").forEach(button => {
-      button.addEventListener("click", () => showPage(button.dataset.page));
-    });
-
-    document.querySelectorAll("[data-go]").forEach(button => {
-      button.addEventListener("click", () => showPage(button.dataset.go));
-    });
-
-    function gameCard(game) {
-      const isFavorite = favorites.includes(game.id);
-      const action = game.url
-        ? `<button class="primary-button" data-play="${escapeHTML(game.id)}">Play Game</button>`
-        : `<button class="secondary-button" data-edit-games>Set Game Link</button>`;
-
-      return `
-        <article class="game-card">
-          <div class="game-icon">${escapeHTML(game.icon)}</div>
-          <h3>${escapeHTML(game.name)}</h3>
-          <p>${escapeHTML(game.description)}</p>
-          <button class="secondary-button" data-favorite="${escapeHTML(game.id)}"
-            aria-label="${isFavorite ? "Remove from" : "Add to"} favorites">
-            ${isFavorite ? "♥ Saved" : "♡ Favorite"}
-          </button>
-          ${action}
-        </article>
-      `;
-    }
-
-    function bindGameActions(container) {
-      container.querySelectorAll("[data-favorite]").forEach(button => {
-        button.addEventListener("click", () => {
-          const id = button.dataset.favorite;
-
-          favorites = favorites.includes(id)
-            ? favorites.filter(item => item !== id)
-            : [...favorites, id];
-
-          writeStorage(STORAGE.favorites, favorites);
-          renderAllGames();
-          renderFavorites();
-        });
-      });
-
-      container.querySelectorAll("[data-play]").forEach(button => {
-        button.addEventListener("click", () => {
-          const game = games.find(item => item.id === button.dataset.play);
-          if (game && game.url) {
-            window.open(game.url, "_blank", "noopener,noreferrer");
-          }
-        });
-      });
-
-      container.querySelectorAll("[data-edit-games]").forEach(button => {
-        button.addEventListener("click", () => {
-          alert("Edit the games array in index.html and add your game's URL.");
-        });
-      });
-    }
-
-    function renderAllGames() {
-      const home = document.getElementById("home-games");
-      const all = document.getElementById("all-games");
-      const explore = document.getElementById("explore-games");
-
-      home.innerHTML = games.slice(0, 2).map(gameCard).join("");
-      all.innerHTML = games.map(gameCard).join("");
-      filterExplore();
-
-      bindGameActions(home);
-      bindGameActions(all);
-    }
-
-    function filterExplore() {
-      const query = (document.getElementById("explore-search").value || "")
-        .trim().toLowerCase();
-
-      const filtered = games.filter(game =>
-        game.name.toLowerCase().includes(query) ||
-        game.description.toLowerCase().includes(query)
-      );
-
-      const container = document.getElementById("explore-games");
-      container.innerHTML = filtered.length
-        ? filtered.map(gameCard).join("")
-        : `<div class="empty-state"><p>No games match your search.</p></div>`;
-
-      bindGameActions(container);
-    }
-
-    function renderFavorites() {
-      const container = document.getElementById("favorite-games");
-      const empty = document.getElementById("favorites-empty");
-      const savedGames = games.filter(game => favorites.includes(game.id));
-
-      container.innerHTML = savedGames.map(gameCard).join("");
-      empty.style.display = savedGames.length ? "none" : "block";
-
-      bindGameActions(container);
-    }
-
-    document.getElementById("explore-search")
-      .addEventListener("input", filterExplore);
-
-    document.getElementById("search-button").addEventListener("click", () => {
-      showPage("explore");
-      document.getElementById("explore-search").focus();
-    });
-
-    // Plan tasks are stored locally in this browser.
-    function renderPlans() {
-      const list = document.getElementById("plan-list");
-      const empty = plans.length === 0;
-
-      document.getElementById("plan-empty").style.display =
-        empty ? "block" : "none";
-
-      list.querySelectorAll(".plan-item").forEach(item => item.remove());
-
-      plans.forEach(plan => {
-        const row = document.createElement("div");
-        row.className = "plan-item" + (plan.done ? " done" : "");
-
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.checked = !!plan.done;
-        checkbox.setAttribute("aria-label", "Mark task complete");
-
-        const text = document.createElement("div");
-        text.className = "plan-text";
-
-        const title = document.createElement("strong");
-        title.textContent = plan.title;
-        text.appendChild(title);
-
-        if (plan.date) {
-          const date = document.createElement("div");
-          date.className = "small-muted";
-          date.textContent = plan.date;
-          text.appendChild(date);
-        }
-
-        if (plan.notes) {
-          const notes = document.createElement("p");
-          notes.style.margin = "6px 0 0";
-          notes.textContent = plan.notes;
-          text.appendChild(notes);
-        }
-
-        checkbox.addEventListener("change", () => {
-          plan.done = checkbox.checked;
-          writeStorage(STORAGE.plans, plans);
-          renderPlans();
-        });
-
-        const remove = document.createElement("button");
-        remove.className = "delete-button";
-        remove.textContent = "×";
-        remove.setAttribute("aria-label", "Delete task");
-
-        remove.addEventListener("click", () => {
-          plans = plans.filter(item => item.id !== plan.id);
-          writeStorage(STORAGE.plans, plans);
-          renderPlans();
-        });
-
-        row.append(checkbox, text, remove);
-        list.appendChild(row);
-      });
-
-      const completed = plans.filter(plan => plan.done).length;
-      document.getElementById("plan-count").textContent =
-        `${completed}/${plans.length} completed`;
-    }
-
-    document.getElementById("add-plan").addEventListener("click", () => {
-      const titleInput = document.getElementById("plan-title");
-      const dateInput = document.getElementById("plan-date");
-      const notesInput = document.getElementById("plan-notes");
-
-      const title = titleInput.value.trim();
-
-      if (!title) {
-        titleInput.focus();
-        titleInput.setCustomValidity("Please enter a plan or goal.");
-        titleInput.reportValidity();
-        titleInput.addEventListener("input", () => {
-          titleInput.setCustomValidity("");
-        }, { once: true });
-        return;
-      }
-
-      plans.unshift({
-        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
-        title,
-        date: dateInput.value,
-        notes: notesInput.value.trim(),
-        done: false
-      });
-
-      writeStorage(STORAGE.plans, plans);
-      titleInput.value = "";
-      dateInput.value = "";
-      notesInput.value = "";
-      renderPlans();
-    });
-
-    // Profile data is saved in this browser.
-    const profileNameInput = document.getElementById("profile-name");
-    profileNameInput.value = profile.name || "";
-
-    document.getElementById("save-profile").addEventListener("click", () => {
-      profile = { name: profileNameInput.value.trim() };
-      const saved = writeStorage(STORAGE.profile, profile);
-
-      document.getElementById("profile-status").textContent = saved
-        ? "Profile saved on this device."
-        : "Could not save profile in this browser.";
-    });
-
-    // Online/offline indicator.
-    const offlineScreen = document.getElementById("offline-screen");
-
-    function checkConnection() {
-      const isOffline = !navigator.onLine;
-      offlineScreen.classList.toggle("show", isOffline);
-      offlineScreen.setAttribute("aria-hidden", String(!isOffline));
-    }
-
-    window.addEventListener("online", checkConnection);
-    window.addEventListener("offline", checkConnection);
-    window.addEventListener("pageshow", checkConnection);
-    checkConnection();
-
-    // Register the existing service worker.
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js")
-          .catch(error => console.error("Service worker registration failed:", error));
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
       });
     }
-
-    renderAllGames();
-    renderFavorites();
-    renderPlans();
   </script>
 </body>
 </html>
