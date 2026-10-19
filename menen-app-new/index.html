@@ -1,137 +1,85 @@
-
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1020">
-  <meta name="description" content="Menen gaming app">
-  <title>Menen</title>
-  <link rel="stylesheet" href="./style.css">
-  <link rel="manifest" href="./manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menen Game Hub - Dark & Gold 3D</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <header class="app-header">
-    <h1 class="logo">Menen<span>.</span></h1>
-    <div class="coin-pill">🪙 <b id="headerCoins">100</b></div>
-  </header>
 
-  <main class="page">
-    <section id="gamePage" class="page-section hidden">
-      <p class="eyebrow">MENEN GAME HUB</p>
-      <h2 class="page-title">እንጫወት! 🎮</h2>
-      <p class="muted intro">ጨዋታዎችን በመጫወት ደስ ይበልህ።</p>
-
-      <div class="wallet-card">
-        <p>የእኔ Menen Coins</p>
-        <div class="balance">🪙 <span id="gameCoins">100</span></div>
-        <p>የኮይን ቀሪ ሂሳብህ</p>
-      </div>
-
-      <h3 class="section-title">ጨዋታዎች</h3>
-      <div class="game-grid">
-        <button class="game-card" data-game>
-          <span class="game-icon">🧩</span>
-          <strong>Puzzle Game</strong>
-          <small>በቅርቡ ይመጣል</small>
-        </button>
-        <button class="game-card" data-game>
-          <span class="game-icon">🎯</span>
-          <strong>Target Game</strong>
-          <small>በቅርቡ ይመጣል</small>
-        </button>
-      </div>
-    </section>
-
-    <section id="profilePage" class="page-section">
-      <p class="eyebrow">YOUR MENEN ACCOUNT</p>
-      <h2 class="page-title">የእኔ Profile 👤</h2>
-      <p class="muted intro">መረጃህን እዚህ አስተዳድር።</p>
-
-      <div class="profile-card">
-        <div class="avatar" id="avatarPreview">👤</div>
-
-        <label class="upload-button" for="photoInput">
-          📷 ፎቶ ቀይር
-        </label>
-        <input id="photoInput" type="file" accept="image/*" hidden>
-
-        <h3 id="displayName" class="profile-name">Menen Player</h3>
-        <p class="muted">Menen ተጠቃሚ</p>
-
-        <div class="form-group">
-          <label for="nameInput">ስምህ</label>
-          <input id="nameInput" maxlength="30"
-                 placeholder="ስምህን አስገባ">
+    <div id="game-container">
+        
+        <!-- Header / Stats Bar -->
+        <div id="top-bar" class="status-bar hidden">
+            <div class="stat-box">🪙 Coins: <span id="coin-count">100</span></div>
+            <div class="stat-box">❤️ Lives: <span id="life-count">3</span></div>
         </div>
-        <button id="saveProfile" class="primary-btn">ስም አስቀምጥ</button>
-        <p id="profileMessage" class="feedback" aria-live="polite"></p>
-      </div>
 
-      <h3 class="section-title">የእኔ Wallet 🪙</h3>
-      <div class="wallet-card">
-        <p>ያለኝ ኮይን</p>
-        <div class="balance">🪙 <span id="profileCoins">100</span></div>
-        <p>Menen Coins</p>
-      </div>
+        <!-- Main Home Screen -->
+        <div id="home-screen" class="screen active">
+            <div class="logo-container">
+                <h1 class="logo-title">MENEN HUB</h1>
+                <p class="logo-subtitle">3D Quiz & Puzzle Game</p>
+            </div>
 
-      <div class="content-card">
-        <h3>ኮይን ላክ</h3>
-        <p class="muted">ይህ የሙከራ ቅጽ ብቻ ነው፤ ኮይን ወደ ሌላ አካውንት አያስተላልፍም።</p>
-
-        <div class="form-group">
-          <label for="recipientInput">የተቀባዩ username</label>
-          <input id="recipientInput" maxlength="40"
-                 placeholder="Username አስገባ">
+            <div class="menu-buttons">
+                <button class="btn-3d" onclick="launchGame('quiz')">Play Quiz Game</button>
+                <button class="btn-3d" onclick="launchGame('puzzle')">3D Puzzle Game</button>
+                <button class="btn-3d btn-gold" onclick="claimDailyBonus()">Daily Bonus 🎁</button>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="amountInput">የኮይን ብዛት</label>
-          <input id="amountInput" type="number" min="1"
-                 step="1" placeholder="ለምሳሌ 10">
+
+        <!-- Quiz Gameplay Screen -->
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-card-3d">
+                <p id="quiz-question-text">Loading question...</p>
+            </div>
+            <div id="quiz-answers-group" class="answers-container">
+                <!-- Buttons injected via JavaScript -->
+            </div>
+            <button class="btn-3d btn-dark" onclick="goBackHome()">Back to Home</button>
         </div>
-        <button id="sendCoins" class="primary-btn">ሞክር</button>
-        <p id="sendMessage" class="feedback" aria-live="polite"></p>
-      </div>
 
-      <h3 class="section-title">መለያ ማረጋገጫ 🪪</h3>
-      <div class="content-card">
-        <p class="muted">
-          እውነተኛ የመታወቂያ ማረጋገጫ ደህንነቱ የተጠበቀ ሰርቨር ይፈልጋል።
-          በዚህ የሙከራ ገጽ መታወቂያህን አትስቀል።
-        </p>
-        <button id="verifyButton" class="secondary-btn">
-          ስለ ማረጋገጫው ይወቁ
-        </button>
-        <p id="verifyMessage" class="feedback" aria-live="polite"></p>
-      </div>
+        <!-- Puzzle Gameplay Screen -->
+        <div id="puzzle-screen" class="screen">
+            <h2 class="section-title">3D Memory Match</h2>
+            <div id="puzzle-board" class="puzzle-grid">
+                <!-- Cards injected via JavaScript -->
+            </div>
+            <button class="btn-3d btn-dark" onclick="goBackHome()">Back to Home</button>
+        </div>
 
-      <h3 class="section-title">Google Account</h3>
-      <div class="content-card">
-        <p class="muted">Google መግቢያ ከመስራቱ በፊት የደህንነት ውቅር ያስፈልጋል።</p>
-        <button id="googleButton" class="secondary-btn">
-          Continue with Google
-        </button>
-        <p id="googleMessage" class="feedback" aria-live="polite"></p>
-      </div>
-    </section>
-  </main>
+        <!-- AdMob Rewarded Ad Simulation Overlay -->
+        <div id="ad-simulation-modal" class="overlay hidden">
+            <div class="modal-card">
+                <h3 style="color: #ffd700;">AdMob Sponsored Ad</h3>
+                <p style="margin: 10px 0; color: #bbb;">Watching ad... (<span id="ad-step">1</span>/<span id="ad-max">3</span>)</p>
+                <div id="ad-timer-display" class="timer-circle">5</div>
+                <p style="font-size: 11px; color: #777;">Please wait until the ad finishes</p>
+            </div>
+        </div>
 
-  <nav class="bottom-nav" aria-label="ዋና ማውጫ">
-    <button class="nav-item" data-page="gamePage">
-      <span>🎮</span><small>Game</small>
-    </button>
-    <button class="nav-item active" data-page="profilePage">
-      <span>👤</span><small>Profile</small>
-    </button>
-  </nav>
+        <!-- Continue / Game Over Modal -->
+        <div id="gameover-modal" class="overlay hidden">
+            <div class="modal-card">
+                <h2 style="color: #ff4d4d;">Game Over!</h2>
+                <p style="margin: 15px 0; font-size: 14px; color: #ddd;">
+                    Would you like to watch 1 to 3 ads to restore your lives and continue playing?
+                </p>
+                <button class="btn-3d" onclick="playRewardedAdsFlow()">Watch Ads & Continue 🎬</button>
+                <button class="btn-3d btn-dark" onclick="closeGameOverAndExit()">No Thanks (Exit)</button>
+            </div>
+        </div>
 
-  <script src="./app.js"></script>
-  <script>
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-      });
-    }
-  </script>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
 </body>
 </html>
