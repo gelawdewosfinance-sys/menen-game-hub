@@ -1,7 +1,7 @@
 {
   "background_color": "#ffffff",
   "dir": "ltr",
-  "display": "fullscreen"",
+  "display": "fullscreen",
   "name": "Menen app Hub",
   "orientation": "any",
   "scope": "/menen-game-hub/menen-app-new/",
