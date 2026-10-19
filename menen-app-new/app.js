@@ -1,184 +1,160 @@
+// Game State Manager
+let gameData = {
+    coins: 100,
+    lives: 3,
+    activeMode: null
+};
 
-
-const $ = (id) => document.getElementById(id);
-
-const DEFAULT_COINS = 100;
-let coins = DEFAULT_COINS;
-
-try {
-  const savedCoins = Number(localStorage.getItem("menen_demo_coins"));
-  if (Number.isFinite(savedCoins) && savedCoins >= 0) {
-    coins = savedCoins;
-  }
-} catch (_) {}
-
-function updateCoins() {
-  $("headerCoins").textContent = coins;
-  $("profileCoins").textContent = coins;
-  $("gameCoins").textContent = coins;
-
-  try {
-    localStorage.setItem("menen_demo_coins", String(coins));
-  } catch (_) {}
-}
-
-function showMessage(id, message) {
-  $(id).textContent = message;
-}
-
-// Load saved name
-let savedName = "Menen Player";
-
-try {
-  savedName = localStorage.getItem("menen_demo_name") || savedName;
-} catch (_) {}
-
-$("nameInput").value = savedName;
-$("displayName").textContent = savedName;
-
-// Save profile name
-$("saveProfile").addEventListener("click", () => {
-  const name = $("nameInput").value.trim();
-
-  if (!name) {
-    showMessage("profileMessage", "እባክህ ስምህን አስገባ።");
-    return;
-  }
-
-  $("displayName").textContent = name;
-
-  try {
-    localStorage.setItem("menen_demo_name", name);
-  } catch (_) {}
-
-  showMessage("profileMessage", "ስምህ ተቀምጧል።");
-});
-
-// Choose a profile photo
-$("photoInput").addEventListener("change", (event) => {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  if (!file.type.startsWith("image/")) {
-    showMessage("profileMessage", "እባክህ የምስል ፋይል ምረጥ።");
-    return;
-  }
-
-  if (file.size > 3 * 1024 * 1024) {
-    showMessage("profileMessage", "ፎቶው ከ3 MB በታች መሆን አለበት።");
-    event.target.value = "";
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = () => {
-    const image = document.createElement("img");
-    image.alt = "Profile photo";
-    image.src = reader.result;
-
-    const avatar = $("avatarPreview");
-    avatar.replaceChildren(image);
-
-    try {
-      localStorage.setItem("menen_demo_photo", reader.result);
-      showMessage("profileMessage", "ፎቶህ በዚህ ብራውዘር ተቀምጧል።");
-    } catch (_) {
-      showMessage(
-        "profileMessage",
-        "ፎቶው ታይቷል፣ ግን ለማስቀመጥ በቂ ቦታ የለም።"
-      );
+// Questions Database (in English)
+const quizQuestions = [
+    {
+        q: "In which year was the United States Central Bank (Federal Reserve) established?",
+        options: ["1913", "1776", "1945", "1890"],
+        correct: 0
+    },
+    {
+        q: "What emotional expression is primarily represented by the 'Anchihoye' scale in Ethiopian music?",
+        options: ["Joy and Romance", "Deep Melancholy and Nostalgia", "War and Battle", "Hope and Inspiration"],
+        correct: 1
+    },
+    {
+        q: "What does 'Inflation' mean in the finance sector?",
+        options: ["Decrease in purchasing power of currency", "Decrease in item prices", "Increase in bank interest rates", "Expansion of job opportunities"],
+        correct: 0
     }
-  };
+];
 
-  reader.readAsDataURL(file);
-});
+let currentQuestionIndex = 0;
 
-// Restore photo
-try {
-  const savedPhoto = localStorage.getItem("menen_demo_photo");
-  if (savedPhoto) {
-    const image = document.createElement("img");
-    image.alt = "Profile photo";
-    image.src = savedPhoto;
-    $("avatarPreview").replaceChildren(image);
-  }
-} catch (_) {}
+function refreshStats() {
+    document.getElementById('coin-count').innerText = gameData.coins;
+    document.getElementById('life-count').innerText = gameData.lives;
+}
 
-// Bottom navigation: Game and Profile
-document.querySelectorAll(".nav-item").forEach((button) => {
-  button.addEventListener("click", () => {
-    const target = button.dataset.page;
+function goBackHome() {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('top-bar').classList.add('hidden');
+    document.getElementById('home-screen').classList.add('active');
+}
 
-    document.querySelectorAll(".page-section").forEach((section) => {
-      section.classList.toggle("hidden", section.id !== target);
+function launchGame(mode) {
+    gameData.activeMode = mode;
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('top-bar').classList.remove('hidden');
+
+    if (mode === 'quiz') {
+        currentQuestionIndex = 0;
+        document.getElementById('quiz-screen').classList.add('active');
+        renderQuiz();
+    } else if (mode === 'puzzle') {
+        document.getElementById('puzzle-screen').classList.add('active');
+        renderPuzzle();
+    }
+    refreshStats();
+}
+
+// Quiz Functions
+function renderQuiz() {
+    let q = quizQuestions[currentQuestionIndex];
+    document.getElementById('quiz-question-text').innerText = q.q;
+    
+    let container = document.getElementById('quiz-answers-group');
+    container.innerHTML = '';
+
+    q.options.forEach((opt, idx) => {
+        let btn = document.createElement('button');
+        btn.className = 'answer-btn';
+        btn.innerText = opt;
+        btn.onclick = () => validateAnswer(idx === q.correct);
+        container.appendChild(btn);
     });
+}
 
-    document.querySelectorAll(".nav-item").forEach((item) => {
-      item.classList.toggle("active", item === button);
+function validateAnswer(isCorrect) {
+    if (isCorrect) {
+        gameData.coins += 20;
+        alert("Correct Answer! +20 Coins");
+    } else {
+        gameData.lives -= 1;
+        alert("Incorrect Answer!");
+    }
+    refreshStats();
+
+    if (gameData.lives <= 0) {
+        document.getElementById('gameover-modal').classList.remove('hidden');
+    } else {
+        currentQuestionIndex = (currentQuestionIndex + 1) % quizQuestions.length;
+        renderQuiz();
+    }
+}
+
+// Puzzle Functions
+function renderPuzzle() {
+    let board = document.getElementById('puzzle-board');
+    board.innerHTML = '';
+    let cards = ['🪙', '💎', '👑', '🪙', '💎', '👑'];
+    cards.sort(() => Math.random() - 0.5);
+
+    cards.forEach(symbol => {
+        let card = document.createElement('div');
+        card.className = 'puzzle-card';
+        card.innerText = '❓';
+        card.onclick = () => {
+            card.innerText = symbol;
+            gameData.coins += 5;
+            refreshStats();
+        };
+        board.appendChild(card);
     });
+}
 
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-});
+// AdMob Flow Simulator (1 to 3 Ads)
+let totalAdsToPlay = 2;
+let currentAdIndex = 1;
 
-// Demo coin sending: deducts coins locally only
-$("sendCoins").addEventListener("click", () => {
-  const recipient = $("recipientInput").value.trim();
-  const amount = Number($("amountInput").value);
+function playRewardedAdsFlow() {
+    document.getElementById('gameover-modal').classList.add('hidden');
+    totalAdsToPlay = Math.floor(Math.random() * 3) + 1; // Random 1, 2, or 3 ads
+    currentAdIndex = 1;
+    executeAdSequence();
+}
 
-  if (!recipient) {
-    showMessage("sendMessage", "የተቀባዩን username አስገባ።");
-    return;
-  }
+function executeAdSequence() {
+    if (currentAdIndex > totalAdsToPlay) {
+        document.getElementById('ad-simulation-modal').classList.add('hidden');
+        gameData.lives = 3;
+        gameData.coins += 30;
+        refreshStats();
+        alert("🎉 Lives restored and bonus coins added for watching ads!");
+        return;
+    }
 
-  if (recipient.toLowerCase() === $("displayName").textContent.toLowerCase()) {
-    showMessage("sendMessage", "ለራስህ መላክ አትችልም።");
-    return;
-  }
+    document.getElementById('ad-step').innerText = currentAdIndex;
+    document.getElementById('ad-max').innerText = totalAdsToPlay;
+    document.getElementById('ad-simulation-modal').classList.remove('hidden');
 
-  if (!Number.isSafeInteger(amount) || amount <= 0) {
-    showMessage("sendMessage", "ትክክለኛ የኮይን ብዛት አስገባ።");
-    return;
-  }
+    let timeLeft = 5;
+    document.getElementById('ad-timer-display').innerText = timeLeft;
 
-  if (amount > coins) {
-    showMessage("sendMessage", "በቂ ኮይን የለህም።");
-    return;
-  }
+    let countdown = setInterval(() => {
+        timeLeft--;
+        document.getElementById('ad-timer-display').innerText = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            currentAdIndex++;
+            executeAdSequence();
+        }
+    }, 1000);
+}
 
-  coins -= amount;
-  updateCoins();
+function closeGameOverAndExit() {
+    document.getElementById('gameover-modal').classList.add('hidden');
+    gameData.lives = 3;
+    goBackHome();
+}
 
-  showMessage(
-    "sendMessage",
-    `${amount} demo coins ከሂሳብህ ተቀንሰዋል። ወደ ሌላ አካውንት አልተላኩም።`
-  );
-
-  $("amountInput").value = "";
-});
-
-// Verification sample: never uploads the selected ID
-$("verificationButton").addEventListener("click", () => {
-  showMessage(
-    "verificationMessage",
-    "ይህ የማሳያ ስሪት ነው። መታወቂያህን እዚህ አትስቀል። እውነተኛ ማረጋገጫ ደህንነቱ የተጠበቀ ሰርቨር ያስፈልገዋል።"
-  );
-});
-
-// Google sign-in sample
-$("googleButton").addEventListener("click", () => {
-  showMessage(
-    "googleMessage",
-    "Google sign-in ገና አልተገናኘም። ለማስኬድ OAuth ውቅር ያስፈልጋል።"
-  );
-});
-
-// Sample game cards
-document.querySelectorAll("[data-game]").forEach((button) => {
-  button.addEventListener("click", () => {
-    alert("ይህ ጨዋታ በቅርቡ ይጨመራል።");
-  });
-});
-
-updateCoins();
+function claimDailyBonus() {
+    gameData.coins += 50;
+    refreshStats();
+    alert("🎉 50 Daily Golden Coins added to your account!");
+}
