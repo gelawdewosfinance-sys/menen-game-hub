@@ -4,11 +4,12 @@
   "display": "standalone",
   "name": "Menen app Hub",
   "orientation": "any",
-  "scope": "/menen-game-hub/",
-  "start_url": "/menen-game-hub/",
+  "scope": "/menen-game-hub/menen-app-new/",
+  "start_url": "/menen-game-hub/menen-app-new/",
   "theme_color": "#ffffff",
   "description": "A professional ready game hub application",
   "id": "menen-app-hub",
+  "short_name": "Menen Hub",
   "icons": [
     {
       "src": "icon.png",
