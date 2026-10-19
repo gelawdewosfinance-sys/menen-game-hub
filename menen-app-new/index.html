@@ -5,150 +5,127 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1020">
-  <meta name="description" content="Menen - Games and profile">
+  <meta name="description" content="Menen gaming app">
   <title>Menen</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="./manifest.json">
 </head>
 <body>
   <header class="app-header">
-    <div class="app-logo">Menen<span>.</span></div>
+    <h1 class="logo">Menen<span>.</span></h1>
     <div class="coin-pill">🪙 <b id="headerCoins">100</b></div>
   </header>
 
   <main class="page">
-    <!-- GAME PAGE -->
     <section id="gamePage" class="page-section hidden">
-      <div class="welcome">
-        <p class="eyebrow">WELCOME TO MENEN</p>
-        <h1>Let's play! 🎮</h1>
-        <p>Play games and enjoy your Menen experience.</p>
-      </div>
+      <p class="eyebrow">MENEN GAME HUB</p>
+      <h2 class="page-title">እንጫወት! 🎮</h2>
+      <p class="muted intro">ጨዋታዎችን በመጫወት ደስ ይበልህ።</p>
 
       <div class="wallet-card">
-        <p>Your Menen Coins</p>
-        <div class="coin-balance">🪙 <span id="gameCoins">100</span></div>
-        <p>Play games to earn more coins.</p>
+        <p>የእኔ Menen Coins</p>
+        <div class="balance">🪙 <span id="gameCoins">100</span></div>
+        <p>የኮይን ቀሪ ሂሳብህ</p>
       </div>
 
-      <h2 class="section-title">Games</h2>
+      <h3 class="section-title">ጨዋታዎች</h3>
       <div class="game-grid">
-        <button class="game-card" data-game="coming">
-          <div class="game-icon">🧩</div>
-          <h3>Puzzle Game</h3>
-          <p>Coming soon</p>
+        <button class="game-card" data-game>
+          <span class="game-icon">🧩</span>
+          <strong>Puzzle Game</strong>
+          <small>በቅርቡ ይመጣል</small>
         </button>
-        <button class="game-card" data-game="coming">
-          <div class="game-icon">🎯</div>
-          <h3>Target Game</h3>
-          <p>Coming soon</p>
+        <button class="game-card" data-game>
+          <span class="game-icon">🎯</span>
+          <strong>Target Game</strong>
+          <small>በቅርቡ ይመጣል</small>
         </button>
       </div>
-      <p class="notice">Games are sample cards for now.</p>
     </section>
 
-    <!-- PROFILE PAGE -->
     <section id="profilePage" class="page-section">
-      <div class="welcome">
-        <p class="eyebrow">YOUR MENEN ACCOUNT</p>
-        <h1>My Profile 👋</h1>
-        <p>Manage your profile and your coins.</p>
-      </div>
+      <p class="eyebrow">YOUR MENEN ACCOUNT</p>
+      <h2 class="page-title">የእኔ Profile 👤</h2>
+      <p class="muted intro">መረጃህን እዚህ አስተዳድር።</p>
 
       <div class="profile-card">
         <div class="avatar" id="avatarPreview">👤</div>
 
-        <label for="photoInput" class="upload-button">
-          📷 Change photo
+        <label class="upload-button" for="photoInput">
+          📷 ፎቶ ቀይር
         </label>
         <input id="photoInput" type="file" accept="image/*" hidden>
 
-        <h2 id="displayName" class="profile-name">Menen Player</h2>
-        <p class="muted">Menen member</p>
+        <h3 id="displayName" class="profile-name">Menen Player</h3>
+        <p class="muted">Menen ተጠቃሚ</p>
 
         <div class="form-group">
-          <label for="nameInput">Your name</label>
-          <input id="nameInput" type="text"
-            maxlength="30" placeholder="Enter your name">
+          <label for="nameInput">ስምህ</label>
+          <input id="nameInput" maxlength="30"
+                 placeholder="ስምህን አስገባ">
         </div>
-        <button id="saveProfile" class="primary-btn">
-          Save Profile
-        </button>
+        <button id="saveProfile" class="primary-btn">ስም አስቀምጥ</button>
         <p id="profileMessage" class="feedback" aria-live="polite"></p>
       </div>
 
-      <h2 class="section-title">My Wallet 🪙</h2>
+      <h3 class="section-title">የእኔ Wallet 🪙</h3>
       <div class="wallet-card">
-        <p>Your coin balance</p>
-        <div class="coin-balance">
-          🪙 <span id="profileCoins">100</span>
-        </div>
+        <p>ያለኝ ኮይን</p>
+        <div class="balance">🪙 <span id="profileCoins">100</span></div>
         <p>Menen Coins</p>
       </div>
 
       <div class="content-card">
-        <h3>Send Coins</h3>
-        <p class="muted">
-          Demo only — this does not transfer coins to another real account.
-        </p>
+        <h3>ኮይን ላክ</h3>
+        <p class="muted">ይህ የሙከራ ቅጽ ብቻ ነው፤ ኮይን ወደ ሌላ አካውንት አያስተላልፍም።</p>
+
         <div class="form-group">
-          <label for="recipientInput">Recipient username</label>
-          <input id="recipientInput" type="text"
-            placeholder="Enter username">
+          <label for="recipientInput">የተቀባዩ username</label>
+          <input id="recipientInput" maxlength="40"
+                 placeholder="Username አስገባ">
         </div>
         <div class="form-group">
-          <label for="amountInput">Amount of coins</label>
-          <input id="amountInput" type="number"
-            min="1" step="1" placeholder="e.g. 10">
+          <label for="amountInput">የኮይን ብዛት</label>
+          <input id="amountInput" type="number" min="1"
+                 step="1" placeholder="ለምሳሌ 10">
         </div>
-        <button id="sendCoins" class="primary-btn">Send (Demo)</button>
+        <button id="sendCoins" class="primary-btn">ሞክር</button>
         <p id="sendMessage" class="feedback" aria-live="polite"></p>
       </div>
 
-      <h2 class="section-title">Account Verification 🪪</h2>
+      <h3 class="section-title">መለያ ማረጋገጫ 🪪</h3>
       <div class="content-card">
         <p class="muted">
-          Verification will require a secure upload service and administrator
-          review. This sample does not upload or save your ID.
+          እውነተኛ የመታወቂያ ማረጋገጫ ደህንነቱ የተጠበቀ ሰርቨር ይፈልጋል።
+          በዚህ የሙከራ ገጽ መታወቂያህን አትስቀል።
         </p>
-        <div class="form-group">
-          <label for="idInput">Choose an ID file (sample only)</label>
-          <input id="idInput" type="file"
-            accept="image/*,.pdf">
-        </div>
-        <button id="verificationButton" class="secondary-btn">
-          Check verification steps
+        <button id="verifyButton" class="secondary-btn">
+          ስለ ማረጋገጫው ይወቁ
         </button>
-        <p id="verificationMessage" class="feedback"
-          aria-live="polite"></p>
+        <p id="verifyMessage" class="feedback" aria-live="polite"></p>
       </div>
 
-      <h2 class="section-title">Google Account</h2>
+      <h3 class="section-title">Google Account</h3>
       <div class="content-card">
-        <p class="muted">
-          Google sign-in needs secure OAuth setup before it can work.
-        </p>
+        <p class="muted">Google መግቢያ ከመስራቱ በፊት የደህንነት ውቅር ያስፈልጋል።</p>
         <button id="googleButton" class="secondary-btn">
           Continue with Google
         </button>
-        <p id="googleMessage" class="feedback"
-          aria-live="polite"></p>
+        <p id="googleMessage" class="feedback" aria-live="polite"></p>
       </div>
     </section>
   </main>
 
-  <nav class="bottom-nav" aria-label="Main navigation">
+  <nav class="bottom-nav" aria-label="ዋና ማውጫ">
     <button class="nav-item" data-page="gamePage">
-      <span>🎮</span>
-      <small>Game</small>
+      <span>🎮</span><small>Game</small>
     </button>
     <button class="nav-item active" data-page="profilePage">
-      <span>👤</span>
-      <small>Profile</small>
+      <span>👤</span><small>Profile</small>
     </button>
   </nav>
 
-  <script src="app.js"></script>
+  <script src="./app.js"></script>
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
